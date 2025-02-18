@@ -1,9 +1,9 @@
+
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, Wind, Sun, Droplets, FileStack, Globe2, PiggyBank } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 
@@ -11,28 +11,17 @@ export default function Index() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isConnecting, setIsConnecting] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
-  const [stakeAmount, setStakeAmount] = useState("");
-  const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [isStaking, setIsStaking] = useState(false);
-  const [isWithdrawing, setIsWithdrawing] = useState(false);
-  const [isClaiming, setIsClaiming] = useState(false);
 
-  // Mock data - replace with actual Web3 integration
-  const [stakedAmount] = useState("0.00");
-  const [availableRewards] = useState("0.00");
-  const [rewardRate] = useState("1.0");
-
-  const connectWallet = async () => {
+  const handleConnect = async () => {
     setIsConnecting(true);
     try {
       // Implement wallet connection logic here
       setTimeout(() => {
-        setIsConnected(true);
         toast({
           title: "Wallet Connected",
           description: "Your wallet has been successfully connected.",
         });
+        navigate("/dashboard");
       }, 1000);
     } catch (error) {
       toast({
@@ -45,215 +34,133 @@ export default function Index() {
     }
   };
 
-  const handleStake = async () => {
-    setIsStaking(true);
-    try {
-      // Implement staking logic here
-      toast({
-        title: "Staking Successful",
-        description: `Successfully staked ${stakeAmount} tokens.`,
-      });
-      setStakeAmount("");
-    } catch (error) {
-      toast({
-        title: "Staking Failed",
-        description: "Failed to stake tokens. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsStaking(false);
-    }
-  };
-
-  const handleWithdraw = async () => {
-    setIsWithdrawing(true);
-    try {
-      // Implement withdrawal logic here
-      toast({
-        title: "Withdrawal Successful",
-        description: `Successfully withdrawn ${withdrawAmount} tokens.`,
-      });
-      setWithdrawAmount("");
-    } catch (error) {
-      toast({
-        title: "Withdrawal Failed",
-        description: "Failed to withdraw tokens. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsWithdrawing(false);
-    }
-  };
-
-  const handleClaim = async () => {
-    setIsClaiming(true);
-    try {
-      // Implement claim rewards logic here
-      toast({
-        title: "Rewards Claimed",
-        description: "Successfully claimed your rewards.",
-      });
-    } catch (error) {
-      toast({
-        title: "Claim Failed",
-        description: "Failed to claim rewards. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsClaiming(false);
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex-1 py-8 px-4 sm:px-6 lg:px-8 animate-fade-in">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <div className="text-center space-y-4">
-            <h1 className="text-4xl font-bold tracking-tight">Welcome to GreenStake</h1>
-            <p className="text-lg text-muted-foreground">
-              Stake your tokens and earn rewards
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-50 to-blue-50">
+          <div className="max-w-7xl mx-auto text-center">
+            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent mb-6">
+              Invest in a Greener Future
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              Join GreenStake and participate in renewable energy projects while earning rewards through decentralized staking.
             </p>
+            <div className="flex gap-4 justify-center">
+              <Button size="lg" onClick={handleConnect} disabled={isConnecting}>
+                {isConnecting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Connecting
+                  </>
+                ) : (
+                  "Connect Wallet"
+                )}
+              </Button>
+              <Button size="lg" variant="outline" onClick={() => navigate("/signup")}>
+                Create Account
+              </Button>
+            </div>
           </div>
+        </section>
 
-          {!isConnected ? (
-            <Card className="glass card-hover">
-              <CardHeader className="text-center">
-                <CardTitle>Connect Wallet</CardTitle>
-                <CardDescription>
-                  Connect your wallet to start staking or{" "}
-                  <Button
-                    variant="link"
-                    className="px-0"
-                    onClick={() => navigate("/signup")}
-                  >
-                    create an account
-                  </Button>
-                </CardDescription>
-              </CardHeader>
-              <CardFooter className="justify-center">
-                <Button
-                  size="lg"
-                  onClick={connectWallet}
-                  disabled={isConnecting}
-                >
-                  {isConnecting ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Connecting
-                    </>
-                  ) : (
-                    "Connect Wallet"
-                  )}
-                </Button>
-              </CardFooter>
-            </Card>
-          ) : (
-            <div className="grid gap-6 md:grid-cols-2">
+        {/* Features Section */}
+        <section className="py-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl font-bold text-center mb-12">Sustainable Investment Features</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <Card className="glass card-hover">
                 <CardHeader>
-                  <CardTitle>Staking Overview</CardTitle>
-                  <CardDescription>Your current staking status</CardDescription>
+                  <Sun className="w-12 h-12 text-yellow-500 mb-4" />
+                  <CardTitle>Solar Farms</CardTitle>
+                  <CardDescription>
+                    Invest in large-scale solar energy projects powering communities.
+                  </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex justify-between">
-                    <span>Staked Amount:</span>
-                    <span className="font-medium">{stakedAmount} Tokens</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Available Rewards:</span>
-                    <span className="font-medium">{availableRewards} GREEN</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Reward Rate:</span>
-                    <span className="font-medium">{rewardRate}x</span>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    className="w-full"
-                    onClick={handleClaim}
-                    disabled={isClaiming || availableRewards === "0.00"}
-                  >
-                    {isClaiming ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Claiming
-                      </>
-                    ) : (
-                      "Claim Rewards"
-                    )}
-                  </Button>
-                </CardFooter>
+              </Card>
+              
+              <Card className="glass card-hover">
+                <CardHeader>
+                  <Wind className="w-12 h-12 text-blue-500 mb-4" />
+                  <CardTitle>Wind Energy</CardTitle>
+                  <CardDescription>
+                    Support wind turbine farms generating clean electricity.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+              
+              <Card className="glass card-hover">
+                <CardHeader>
+                  <Droplets className="w-12 h-12 text-blue-400 mb-4" />
+                  <CardTitle>Hydroelectric</CardTitle>
+                  <CardDescription>
+                    Fund hydroelectric power plants for sustainable energy generation.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Benefits Section */}
+        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-50 to-blue-50">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl font-bold text-center mb-12">Why Choose GreenStake?</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <Card className="glass card-hover">
+                <CardHeader>
+                  <Globe2 className="w-12 h-12 text-green-500 mb-4" />
+                  <CardTitle>Environmental Impact</CardTitle>
+                  <CardDescription>
+                    Make a real difference in the fight against climate change through direct investment in renewable energy.
+                  </CardDescription>
+                </CardHeader>
               </Card>
 
-              <div className="space-y-6">
-                <Card className="glass card-hover">
-                  <CardHeader>
-                    <CardTitle>Stake Tokens</CardTitle>
-                    <CardDescription>Enter amount to stake</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex space-x-2">
-                      <Input
-                        type="number"
-                        placeholder="0.00"
-                        value={stakeAmount}
-                        onChange={(e) => setStakeAmount(e.target.value)}
-                        className="input-ring"
-                      />
-                      <Button
-                        onClick={handleStake}
-                        disabled={isStaking || !stakeAmount}
-                      >
-                        {isStaking ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Staking
-                          </>
-                        ) : (
-                          "Stake"
-                        )}
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+              <Card className="glass card-hover">
+                <CardHeader>
+                  <PiggyBank className="w-12 h-12 text-purple-500 mb-4" />
+                  <CardTitle>Earn Rewards</CardTitle>
+                  <CardDescription>
+                    Receive staking rewards while supporting sustainable energy projects.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
 
-                <Card className="glass card-hover">
-                  <CardHeader>
-                    <CardTitle>Withdraw Tokens</CardTitle>
-                    <CardDescription>Enter amount to withdraw</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex space-x-2">
-                      <Input
-                        type="number"
-                        placeholder="0.00"
-                        value={withdrawAmount}
-                        onChange={(e) => setWithdrawAmount(e.target.value)}
-                        className="input-ring"
-                      />
-                      <Button
-                        onClick={handleWithdraw}
-                        disabled={isWithdrawing || !withdrawAmount}
-                      >
-                        {isWithdrawing ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Withdrawing
-                          </>
-                        ) : (
-                          "Withdraw"
-                        )}
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+              <Card className="glass card-hover">
+                <CardHeader>
+                  <FileStack className="w-12 h-12 text-blue-500 mb-4" />
+                  <CardTitle>Transparent & Secure</CardTitle>
+                  <CardDescription>
+                    All investments are recorded on the blockchain, ensuring transparency and security.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
             </div>
-          )}
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-6">Ready to Start Investing in Green Energy?</h2>
+            <p className="text-xl text-gray-600 mb-8">
+              Join thousands of investors already making a difference while earning rewards.
+            </p>
+            <Button size="lg" onClick={() => navigate("/signup")} className="animate-pulse">
+              Get Started Now
+            </Button>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center text-gray-600">
+          <p>&copy; 2024 GreenStake. All rights reserved.</p>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }
