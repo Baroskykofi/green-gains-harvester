@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Signup() {
   const { toast } = useToast();
@@ -15,6 +17,8 @@ export default function Signup() {
     email: "",
     password: "",
     confirmPassword: "",
+    fullName: "",
+    username: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,17 +35,38 @@ export default function Signup() {
       return;
     }
 
-    try {
-      // Implement signup logic here
-      toast({
-        title: "Account created",
-        description: "Your account has been created successfully.",
-      });
-      navigate("/");
-    } catch (error) {
+    if (formData.username.length < 3) {
       toast({
         title: "Error",
-        description: "Failed to create account. Please try again.",
+        description: "Username must be at least 3 characters long",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            full_name: formData.fullName,
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Account created",
+        description: "Your account has been created successfully. You can now sign in.",
+      });
+      navigate("/");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create account. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -62,6 +87,29 @@ export default function Signup() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Input
+                  id="username"
+                  placeholder="Username"
+                  required
+                  className="input-ring"
+                  value={formData.username}
+                  onChange={(e) =>
+                    setFormData({ ...formData, username: e.target.value })
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Input
+                  id="fullName"
+                  placeholder="Full Name"
+                  className="input-ring"
+                  value={formData.fullName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, fullName: e.target.value })
+                  }
+                />
+              </div>
               <div className="space-y-2">
                 <Input
                   id="email"
