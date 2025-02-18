@@ -1,13 +1,15 @@
 
 import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Index() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isConnecting, setIsConnecting] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [stakeAmount, setStakeAmount] = useState("");
@@ -117,7 +119,14 @@ export default function Index() {
             <CardHeader className="text-center">
               <CardTitle>Connect Wallet</CardTitle>
               <CardDescription>
-                Connect your wallet to start staking
+                Connect your wallet to start staking or{" "}
+                <Button
+                  variant="link"
+                  className="px-0"
+                  onClick={() => navigate("/signup")}
+                >
+                  create an account
+                </Button>
               </CardDescription>
             </CardHeader>
             <CardFooter className="justify-center">
