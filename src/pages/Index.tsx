@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -6,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Navbar } from "@/components/Navbar";
 
 export default function Index() {
   const { toast } = useToast();
@@ -105,151 +105,154 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8 animate-fade-in">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight">GreenStake</h1>
-          <p className="text-lg text-muted-foreground">
-            Stake your tokens and earn rewards
-          </p>
-        </div>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="flex-1 py-8 px-4 sm:px-6 lg:px-8 animate-fade-in">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl font-bold tracking-tight">Welcome to GreenStake</h1>
+            <p className="text-lg text-muted-foreground">
+              Stake your tokens and earn rewards
+            </p>
+          </div>
 
-        {!isConnected ? (
-          <Card className="glass card-hover">
-            <CardHeader className="text-center">
-              <CardTitle>Connect Wallet</CardTitle>
-              <CardDescription>
-                Connect your wallet to start staking or{" "}
-                <Button
-                  variant="link"
-                  className="px-0"
-                  onClick={() => navigate("/signup")}
-                >
-                  create an account
-                </Button>
-              </CardDescription>
-            </CardHeader>
-            <CardFooter className="justify-center">
-              <Button
-                size="lg"
-                onClick={connectWallet}
-                disabled={isConnecting}
-              >
-                {isConnecting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Connecting
-                  </>
-                ) : (
-                  "Connect Wallet"
-                )}
-              </Button>
-            </CardFooter>
-          </Card>
-        ) : (
-          <div className="grid gap-6 md:grid-cols-2">
+          {!isConnected ? (
             <Card className="glass card-hover">
-              <CardHeader>
-                <CardTitle>Staking Overview</CardTitle>
-                <CardDescription>Your current staking status</CardDescription>
+              <CardHeader className="text-center">
+                <CardTitle>Connect Wallet</CardTitle>
+                <CardDescription>
+                  Connect your wallet to start staking or{" "}
+                  <Button
+                    variant="link"
+                    className="px-0"
+                    onClick={() => navigate("/signup")}
+                  >
+                    create an account
+                  </Button>
+                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between">
-                  <span>Staked Amount:</span>
-                  <span className="font-medium">{stakedAmount} Tokens</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Available Rewards:</span>
-                  <span className="font-medium">{availableRewards} GREEN</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Reward Rate:</span>
-                  <span className="font-medium">{rewardRate}x</span>
-                </div>
-              </CardContent>
-              <CardFooter>
+              <CardFooter className="justify-center">
                 <Button
-                  className="w-full"
-                  onClick={handleClaim}
-                  disabled={isClaiming || availableRewards === "0.00"}
+                  size="lg"
+                  onClick={connectWallet}
+                  disabled={isConnecting}
                 >
-                  {isClaiming ? (
+                  {isConnecting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Claiming
+                      Connecting
                     </>
                   ) : (
-                    "Claim Rewards"
+                    "Connect Wallet"
                   )}
                 </Button>
               </CardFooter>
             </Card>
-
-            <div className="space-y-6">
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2">
               <Card className="glass card-hover">
                 <CardHeader>
-                  <CardTitle>Stake Tokens</CardTitle>
-                  <CardDescription>Enter amount to stake</CardDescription>
+                  <CardTitle>Staking Overview</CardTitle>
+                  <CardDescription>Your current staking status</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="flex space-x-2">
-                    <Input
-                      type="number"
-                      placeholder="0.00"
-                      value={stakeAmount}
-                      onChange={(e) => setStakeAmount(e.target.value)}
-                      className="input-ring"
-                    />
-                    <Button
-                      onClick={handleStake}
-                      disabled={isStaking || !stakeAmount}
-                    >
-                      {isStaking ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Staking
-                        </>
-                      ) : (
-                        "Stake"
-                      )}
-                    </Button>
+                <CardContent className="space-y-4">
+                  <div className="flex justify-between">
+                    <span>Staked Amount:</span>
+                    <span className="font-medium">{stakedAmount} Tokens</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Available Rewards:</span>
+                    <span className="font-medium">{availableRewards} GREEN</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Reward Rate:</span>
+                    <span className="font-medium">{rewardRate}x</span>
                   </div>
                 </CardContent>
+                <CardFooter>
+                  <Button
+                    className="w-full"
+                    onClick={handleClaim}
+                    disabled={isClaiming || availableRewards === "0.00"}
+                  >
+                    {isClaiming ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Claiming
+                      </>
+                    ) : (
+                      "Claim Rewards"
+                    )}
+                  </Button>
+                </CardFooter>
               </Card>
 
-              <Card className="glass card-hover">
-                <CardHeader>
-                  <CardTitle>Withdraw Tokens</CardTitle>
-                  <CardDescription>Enter amount to withdraw</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex space-x-2">
-                    <Input
-                      type="number"
-                      placeholder="0.00"
-                      value={withdrawAmount}
-                      onChange={(e) => setWithdrawAmount(e.target.value)}
-                      className="input-ring"
-                    />
-                    <Button
-                      onClick={handleWithdraw}
-                      disabled={isWithdrawing || !withdrawAmount}
-                    >
-                      {isWithdrawing ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Withdrawing
-                        </>
-                      ) : (
-                        "Withdraw"
-                      )}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              <div className="space-y-6">
+                <Card className="glass card-hover">
+                  <CardHeader>
+                    <CardTitle>Stake Tokens</CardTitle>
+                    <CardDescription>Enter amount to stake</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex space-x-2">
+                      <Input
+                        type="number"
+                        placeholder="0.00"
+                        value={stakeAmount}
+                        onChange={(e) => setStakeAmount(e.target.value)}
+                        className="input-ring"
+                      />
+                      <Button
+                        onClick={handleStake}
+                        disabled={isStaking || !stakeAmount}
+                      >
+                        {isStaking ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Staking
+                          </>
+                        ) : (
+                          "Stake"
+                        )}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="glass card-hover">
+                  <CardHeader>
+                    <CardTitle>Withdraw Tokens</CardTitle>
+                    <CardDescription>Enter amount to withdraw</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex space-x-2">
+                      <Input
+                        type="number"
+                        placeholder="0.00"
+                        value={withdrawAmount}
+                        onChange={(e) => setWithdrawAmount(e.target.value)}
+                        className="input-ring"
+                      />
+                      <Button
+                        onClick={handleWithdraw}
+                        disabled={isWithdrawing || !withdrawAmount}
+                      >
+                        {isWithdrawing ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Withdrawing
+                          </>
+                        ) : (
+                          "Withdraw"
+                        )}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
