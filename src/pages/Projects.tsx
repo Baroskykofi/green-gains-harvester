@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -61,11 +60,19 @@ export default function Projects() {
         throw new Error("Please enter a valid amount");
       }
 
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error("Please connect your wallet first");
+      }
+
       const { error } = await supabase
         .from('stakes')
         .insert({
           project_id: project.id,
           amount: amount,
+          user_id: user.id,
+          status: 'active'
         });
 
       if (error) throw error;
