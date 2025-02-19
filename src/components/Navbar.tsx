@@ -1,8 +1,19 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { UserCircle } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export function Navbar() {
+  const { data: session } = useQuery({
+    queryKey: ['session'],
+    queryFn: async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      return session;
+    },
+  });
+
   return (
     <nav className="border-b">
       <div className="flex h-16 items-center px-4 container mx-auto">
@@ -15,7 +26,16 @@ export function Navbar() {
           </Link>
         </div>
         <div className="ml-auto flex items-center space-x-4">
-          <Button variant="ghost">Connect Wallet</Button>
+          {session ? (
+            <Link to="/profile">
+              <Button variant="ghost">
+                <UserCircle className="h-5 w-5 mr-2" />
+                Profile
+              </Button>
+            </Link>
+          ) : (
+            <Button variant="ghost">Connect Wallet</Button>
+          )}
         </div>
       </div>
     </nav>
