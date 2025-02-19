@@ -33,6 +33,83 @@ export type Database = {
         }
         Relationships: []
       }
+      projects: {
+        Row: {
+          created_at: string | null
+          current_funding: number | null
+          description: string
+          estimated_roi: number
+          id: string
+          image_url: string | null
+          location: string
+          project_type: Database["public"]["Enums"]["project_type"]
+          status: string | null
+          title: string
+          total_funding_target: number
+        }
+        Insert: {
+          created_at?: string | null
+          current_funding?: number | null
+          description: string
+          estimated_roi: number
+          id?: string
+          image_url?: string | null
+          location: string
+          project_type: Database["public"]["Enums"]["project_type"]
+          status?: string | null
+          title: string
+          total_funding_target: number
+        }
+        Update: {
+          created_at?: string | null
+          current_funding?: number | null
+          description?: string
+          estimated_roi?: number
+          id?: string
+          image_url?: string | null
+          location?: string
+          project_type?: Database["public"]["Enums"]["project_type"]
+          status?: string | null
+          title?: string
+          total_funding_target?: number
+        }
+        Relationships: []
+      }
+      stakes: {
+        Row: {
+          amount: number
+          created_at: string | null
+          id: string
+          project_id: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          id?: string
+          project_id: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          id?: string
+          project_id?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stakes_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -41,7 +118,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      project_type: "solar" | "wind" | "hydro"
     }
     CompositeTypes: {
       [_ in never]: never
