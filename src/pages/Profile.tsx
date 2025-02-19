@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Loader2, CoinIcon } from "lucide-react";
+import { Loader2, CoinsIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
 
@@ -108,7 +108,7 @@ export default function Profile() {
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center space-x-2">
-                      <CoinIcon className="h-5 w-5 text-yellow-500" />
+                      <CoinsIcon className="h-5 w-5 text-yellow-500" />
                       <span className="text-2xl font-bold">${totalInvestment.toLocaleString()}</span>
                     </div>
                   </CardContent>
