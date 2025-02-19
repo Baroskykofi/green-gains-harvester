@@ -9,64 +9,36 @@ import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { supabase } from "@/integrations/supabase/client";
 
-export default function Signup() {
+export default function Signin() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    confirmPassword: "",
-    fullName: "",
-    username: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (formData.password !== formData.confirmPassword) {
-      toast({
-        title: "Error",
-        description: "Passwords do not match",
-        variant: "destructive",
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    if (formData.username.length < 3) {
-      toast({
-        title: "Error",
-        description: "Username must be at least 3 characters long",
-        variant: "destructive",
-      });
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
-        options: {
-          data: {
-            full_name: formData.fullName,
-          },
-        },
       });
 
       if (error) throw error;
 
       toast({
-        title: "Account created",
-        description: "Your account has been created successfully. You can now sign in.",
+        title: "Success",
+        description: "You have successfully signed in.",
       });
-      navigate("/");
+      navigate("/profile");
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "Failed to create account. Please try again.",
+        description: error.message || "Failed to sign in. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -81,35 +53,12 @@ export default function Signup() {
         <Card className="w-full max-w-md glass card-hover">
           <form onSubmit={handleSubmit}>
             <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl text-center">Sign up</CardTitle>
+              <CardTitle className="text-2xl text-center">Sign in</CardTitle>
               <CardDescription className="text-center">
-                Create an account to start staking
+                Sign in to your account to start staking
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Input
-                  id="username"
-                  placeholder="Username"
-                  required
-                  className="input-ring"
-                  value={formData.username}
-                  onChange={(e) =>
-                    setFormData({ ...formData, username: e.target.value })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Input
-                  id="fullName"
-                  placeholder="Full Name"
-                  className="input-ring"
-                  value={formData.fullName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, fullName: e.target.value })
-                  }
-                />
-              </div>
               <div className="space-y-2">
                 <Input
                   id="email"
@@ -136,19 +85,6 @@ export default function Signup() {
                   }
                 />
               </div>
-              <div className="space-y-2">
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="Confirm Password"
-                  required
-                  className="input-ring"
-                  value={formData.confirmPassword}
-                  onChange={(e) =>
-                    setFormData({ ...formData, confirmPassword: e.target.value })
-                  }
-                />
-              </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
               <Button
@@ -159,19 +95,19 @@ export default function Signup() {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Creating account...
+                    Signing in...
                   </>
                 ) : (
-                  "Sign up"
+                  "Sign in"
                 )}
               </Button>
               <Button
                 type="button"
                 variant="link"
                 className="w-full"
-                onClick={() => navigate("/signin")}
+                onClick={() => navigate("/signup")}
               >
-                Already have an account? Sign in
+                Don't have an account? Sign up
               </Button>
             </CardFooter>
           </form>
