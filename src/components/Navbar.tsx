@@ -27,14 +27,19 @@ export function Navbar() {
         </div>
         <div className="ml-auto flex items-center space-x-4">
           {session ? (
-            <Link to="/profile">
-              <Button variant="ghost">
-                <UserCircle className="h-5 w-5 mr-2" />
-                Profile
-              </Button>
-            </Link>
+            <>
+              <Button variant="outline">Connect Wallet</Button>
+              <Link to="/profile">
+                <Button variant="ghost">
+                  <UserCircle className="h-5 w-5 mr-2" />
+                  Profile
+                </Button>
+              </Link>
+            </>
           ) : (
-            <Button variant="ghost">Connect Wallet</Button>
+            <Link to="/signin">
+              <Button variant="ghost">Sign In</Button>
+            </Link>
           )}
         </div>
       </div>

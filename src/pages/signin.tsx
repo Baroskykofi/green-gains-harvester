@@ -50,7 +50,7 @@ export default function Signin() {
         title: "Success",
         description: "You have successfully signed in.",
       });
-      navigate("/profile");
+      navigate("/projects"); // Changed from /profile to /projects
     } catch (error: any) {
       toast({
         title: "Error",
