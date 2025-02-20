@@ -3,9 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Loader2, CoinsIcon } from "lucide-react";
+import { Loader2, CoinsIcon, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 type Profile = {
   id: string;
@@ -26,6 +28,24 @@ type Stake = {
 
 export default function Profile() {
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out. Please try again.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Signed out",
+        description: "You have been signed out successfully.",
+      });
+      navigate("/signin");
+    }
+  };
 
   const { data: profile, isLoading: isLoadingProfile } = useQuery({
     queryKey: ['profile'],
@@ -88,17 +108,27 @@ export default function Profile() {
       <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-50 to-blue-50">
         <div className="max-w-7xl mx-auto space-y-8">
           <Card className="w-full">
-            <CardHeader className="flex flex-row items-center space-x-4">
-              <Avatar className="h-20 w-20">
-                <AvatarImage src={profile?.avatar_url || ''} />
-                <AvatarFallback>
-                  {profile?.full_name?.[0] || profile?.username?.[0] || '?'}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <CardTitle className="text-2xl">{profile?.full_name || 'Anonymous'}</CardTitle>
-                <CardDescription>@{profile?.username || 'user'}</CardDescription>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <Avatar className="h-20 w-20">
+                  <AvatarImage src={profile?.avatar_url || ''} />
+                  <AvatarFallback>
+                    {profile?.full_name?.[0] || profile?.username?.[0] || '?'}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <CardTitle className="text-2xl">{profile?.full_name || 'Anonymous'}</CardTitle>
+                  <CardDescription>@{profile?.username || 'user'}</CardDescription>
+                </div>
               </div>
+              <Button 
+                variant="outline" 
+                className="ml-auto"
+                onClick={handleLogout}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign out
+              </Button>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
