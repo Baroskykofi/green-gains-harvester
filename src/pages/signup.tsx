@@ -46,7 +46,8 @@ export default function Signup() {
     }
 
     try {
-      const { data, error } = await supabase.auth.signUp({
+      // Sign up the user
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
@@ -56,13 +57,26 @@ export default function Signup() {
         },
       });
 
-      if (error) throw error;
+      if (authError) throw authError;
+
+      // Create profile in the profiles table
+      if (authData.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .upsert({
+            id: authData.user.id,
+            username: formData.username,
+            full_name: formData.fullName,
+          });
+
+        if (profileError) throw profileError;
+      }
 
       toast({
         title: "Account created",
         description: "Your account has been created successfully. You can now sign in.",
       });
-      navigate("/");
+      navigate("/signin");
     } catch (error: any) {
       toast({
         title: "Error",
