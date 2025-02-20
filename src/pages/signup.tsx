@@ -13,6 +13,7 @@ export default function Signup() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -72,21 +73,57 @@ export default function Signup() {
         if (profileError) throw profileError;
       }
 
-      toast({
-        title: "Account created",
-        description: "Your account has been created successfully. You can now sign in.",
-      });
-      navigate("/signin");
+      setIsSubmitted(true);
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message || "Failed to create account. Please try again.",
         variant: "destructive",
       });
-    } finally {
       setIsLoading(false);
     }
   };
+
+  if (isSubmitted) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 animate-fade-in">
+          <Card className="w-full max-w-md glass card-hover">
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl text-center">Check your email</CardTitle>
+              <CardDescription className="text-center">
+                We've sent a confirmation email to {formData.email}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4 text-center">
+              <p className="text-muted-foreground">
+                Please check your email and click the confirmation link to complete your registration.
+              </p>
+            </CardContent>
+            <CardFooter className="flex flex-col space-y-4">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => window.location.href = "https://mail.google.com"}
+              >
+                Open Gmail
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full"
+                onClick={() => navigate("/signin")}
+              >
+                Back to Sign in
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
