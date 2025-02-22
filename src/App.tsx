@@ -13,8 +13,8 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <WagmiProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <WagmiProvider>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
@@ -25,8 +25,8 @@ function App() {
           </Routes>
           <Toaster />
         </BrowserRouter>
-      </QueryClientProvider>
-    </WagmiProvider>
+      </WagmiProvider>
+    </QueryClientProvider>
   );
 }
 
