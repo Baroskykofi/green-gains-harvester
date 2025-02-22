@@ -4,6 +4,7 @@ import { CONTRACT_ADDRESSES } from '@/config/constants';
 import projectListingABI from '@/abis/ProjectListing.json';
 import daoABI from '@/abis/DAO.json';
 import donateABI from '@/abis/Donate.json';
+import { parseEther } from 'viem';
 
 export function useContracts() {
   // ProjectListing Contract Reads
@@ -27,20 +28,17 @@ export function useContracts() {
   });
 
   // Contract Writes
-  const { writeAsync: listProject } = useContractWrite({
-    address: CONTRACT_ADDRESSES.projectListing,
+  const { write: listProject } = useContractWrite({
     abi: projectListingABI,
     functionName: 'listProject',
   });
 
-  const { writeAsync: joinDAO } = useContractWrite({
-    address: CONTRACT_ADDRESSES.dao,
+  const { write: joinDAO } = useContractWrite({
     abi: daoABI,
     functionName: 'joinDAO',
   });
 
-  const { writeAsync: donateToProject } = useContractWrite({
-    address: CONTRACT_ADDRESSES.donate,
+  const { write: donateToProject } = useContractWrite({
     abi: donateABI,
     functionName: 'donateToProject',
   });
