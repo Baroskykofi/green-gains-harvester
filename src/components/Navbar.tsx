@@ -1,9 +1,10 @@
 
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { UserCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { ConnectButton } from "./ConnectButton";
 
 export function Navbar() {
   const { data: session } = useQuery({
@@ -24,11 +25,16 @@ export function Navbar() {
           <Link to="/projects">
             <Button variant="ghost">Projects</Button>
           </Link>
+          {session && (
+            <Link to="/dao">
+              <Button variant="ghost">DAO</Button>
+            </Link>
+          )}
         </div>
         <div className="ml-auto flex items-center space-x-4">
           {session ? (
             <>
-              <Button variant="outline">Connect Wallet</Button>
+              <ConnectButton />
               <Link to="/profile">
                 <Button variant="ghost">
                   <UserCircle className="h-5 w-5 mr-2" />
