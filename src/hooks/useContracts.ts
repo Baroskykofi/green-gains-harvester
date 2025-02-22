@@ -28,17 +28,20 @@ export function useContracts() {
   });
 
   // Contract Writes
-  const { write: listProject } = useContractWrite({
+  const { writeAsync: listProject } = useContractWrite({
+    address: CONTRACT_ADDRESSES.projectListing,
     abi: projectListingABI,
     functionName: 'listProject',
   });
 
-  const { write: joinDAO } = useContractWrite({
+  const { writeAsync: joinDAO } = useContractWrite({
+    address: CONTRACT_ADDRESSES.dao,
     abi: daoABI,
     functionName: 'joinDAO',
   });
 
-  const { write: donateToProject } = useContractWrite({
+  const { writeAsync: donateToProject } = useContractWrite({
+    address: CONTRACT_ADDRESSES.donate,
     abi: donateABI,
     functionName: 'donateToProject',
   });
